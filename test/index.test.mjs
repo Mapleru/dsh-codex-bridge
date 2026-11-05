@@ -116,6 +116,8 @@ test('apply registers both tools, the skill and lifecycle cleanup', async (t) =>
   assert.equal(fake.skills.length, 1)
   assert.equal(fake.skills[0].name, 'codex-bridge')
   assert.ok(fake.skills[0].content.includes('codex_bridge_send'))
+  assert.equal(typeof fake.skills[0].source, 'string')
+  assert.ok(fake.skills[0].source.endsWith('SKILL.md'))
 
   const send = fake.tools.find((entry) => entry.definition.name === 'codex_bridge_send')
   assert.equal(typeof send.definition.execute, 'function')
