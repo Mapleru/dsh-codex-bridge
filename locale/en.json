@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Codex Bridge",
+    "description": "Two-way message bridge between one DSH session and a dedicated Codex CLI thread, using a local file mailbox."
+  }
+}

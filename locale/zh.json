@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Codex 桥",
+    "description": "在指定 DSH 会话与专用 Codex CLI 会话之间，通过本地文件邮箱双向传递消息。"
+  }
+}

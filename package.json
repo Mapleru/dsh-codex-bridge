@@ -1,0 +1,55 @@
+{
+  "name": "dsh-codex-bridge",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Bidirectional local-file bridge between one DSH Desktop session and one dedicated Codex CLI session.",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json",
+    "./locale/en.json": "./locale/en.json",
+    "./locale/zh.json": "./locale/zh.json",
+    "./icon": "./icon.svg"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "index.js",
+    "lib/",
+    "cordis.patch.yml",
+    "tools/",
+    "skills/",
+    "examples/",
+    "locale/",
+    "icon.svg",
+    "README.md",
+    "VERIFY.md"
+  ],
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "author": "Mapleru",
+  "keywords": [
+    "dsh",
+    "cordis",
+    "codex",
+    "bridge",
+    "mailbox"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mapleru/dsh-codex-bridge.git"
+  },
+  "homepage": "https://github.com/Mapleru/dsh-codex-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/Mapleru/dsh-codex-bridge/issues"
+  }
+}

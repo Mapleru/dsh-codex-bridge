@@ -1,0 +1,49 @@
+- insert:
+    - id: codex-bridge
+      name: dsh-codex-bridge
+      config:
+        # Fill these values before the bridge can become ready.
+        # root must live inside codexWorkingDirectory so Codex's sandbox can
+        # write the mailbox without widening its permissions.
+        root: ''
+        dshSessionId: ''
+        codexExecutable: ''
+        codexWorkingDirectory: ''
+        # How a Codex message is delivered into DSH:
+        #   webhook (default) -> agent.followup with source.kind=webhook, so the
+        #                        session shows it as an external/notice message.
+        #   user              -> sessionController.prompt with an idempotent
+        #                        requestId; renders as a normal user message.
+        deliverySource: webhook
+        # followup: 等当前回合结束再送达（默认）；steer: 立即送达并开新回合
+        deliveryMode: followup
+        # How to run a Codex turn:
+        #   auto (default) -> exec first; if the thread is held by the Codex
+        #                     desktop app, fall back to `codex queue`.
+        #   exec           -> always a bridge-owned child process.
+        #   queue          -> always the shared app-server (desktop-held threads).
+        transport: auto
+        # Optional multi-session routing. When `routes` is set it replaces the
+        # single dshSessionId binding above; the first route also mirrors the
+        # top-level fields. Every route needs its own dshSessionId, and may
+        # override codexWorkingDirectory / model / codexSessionId.
+        # routes:
+        #   - id: default
+        #     dshSessionId: session-00000000-0000-4000-8000-000000000000
+        #     codexWorkingDirectory: D:/codex/collab-a
+        #   - id: research
+        #     dshSessionId: session-11111111-1111-4111-8111-111111111111
+        #     codexWorkingDirectory: D:/codex/collab-b
+        # Defaults below are applied by lib/config.js when omitted. They are
+        # listed here so the profile shows the effective values.
+        codexTimeoutMs: 900000
+        maxHops: 6
+        maxAttempts: 3
+        maxQueueDepth: 20
+        maxMessageBytes: 32768
+        maxMailboxBytes: 8388608
+        pollIntervalMs: 2000
+        debounceMs: 300
+        retryBaseMs: 5000
+        shutdownTimeoutMs: 4000
+        model: ''

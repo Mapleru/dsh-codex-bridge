@@ -1,0 +1,37 @@
+# 示例：把配置并入 profile 的 cordis.patch.yml。
+#
+# 正常情况下不要手写这一段：用 plugin_manager 的 install_bundle 安装并选中
+# dsh-codex-bridge，bundle 自带的 cordis.patch.yml 会插入 id 为 codex-bridge 的行。
+# 只有在你明确不使用 plugin_manager 时，才把下面的 insert 加到 profile patch。
+#
+# 注意：不要同时使用 plugin_manager 安装和手工 insert，否则会加载两次。
+
+- insert:
+    - id: codex-bridge
+      name: dsh-codex-bridge
+      config:
+        root: D:/codex-collab/codex-bridge
+        dshSessionId: 00000000-0000-0000-0000-000000000000
+        codexExecutable: C:/Program Files/WindowsApps/OpenAI.Codex_<version>_x64__<hash>/app/resources/codex.exe
+        codexWorkingDirectory: D:/codex-collab
+        codexTimeoutMs: 900000
+        maxHops: 6
+        maxAttempts: 3
+        maxQueueDepth: 20
+        maxMessageBytes: 32768
+        maxMailboxBytes: 8388608
+        pollIntervalMs: 2000
+        debounceMs: 300
+        retryBaseMs: 5000
+        shutdownTimeoutMs: 4000
+        deliverySource: webhook   # webhook: 外部/通知来源；user: 普通用户消息
+        deliveryMode: followup    # followup: 等当前回合结束；steer: 立即送达
+        transport: auto           # auto: 先 exec，线程被桌面占用时改走 codex queue
+        # routes:                 # 可选：一条路由 = 一个 DSH 会话 + 一个 Codex thread
+        #   - id: default
+        #     dshSessionId: 00000000-0000-0000-0000-000000000000
+        #     codexWorkingDirectory: D:/codex-collab
+        #   - id: second
+        #     dshSessionId: 11111111-1111-4111-8111-111111111111
+        #     codexWorkingDirectory: D:/codex-collab
+        # model: ''            # 可选；留空使用 Codex 自己的默认模型
