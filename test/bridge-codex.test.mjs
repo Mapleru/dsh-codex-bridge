@@ -306,7 +306,7 @@ async function pathExists(file) {
   }
 }
 
-test('an operator cursor rewind is picked up by the running bridge', async (t) => {
+test('an operator cursor rewind does not re-run a message that already has a reply', async (t) => {
   const workspace = await makeWorkspace(t)
   const calls = []
   const { bridge } = await setup(workspace, {
@@ -324,11 +324,14 @@ test('an operator cursor rewind is picked up by the running bridge', async (t) =
   await bridge.tick('second')
   assert.equal(calls.length, 2)
 
-  // ctl.mjs retry rewinds the on-disk cursor; a live bridge must notice.
+  // ctl.mjs retry rewinds the on-disk cursor; a live bridge must notice but
+  // must not spend a second turn on a record that already produced a reply.
   await writeCursor(workspace.root, FILES.cursorCodex, afterFirst)
+  const end = bridge.cursorCodex
   await bridge.tick('after-retry')
-  assert.equal(calls.length, 3)
-  assert.match(calls[2].stdinText, /second question/)
+  assert.equal(calls.length, 2)
+  assert.ok(bridge.cursorCodex >= end)
+  assert.equal(bridge.snapshot().queue.dshToCodex, 0)
 })
 
 const OTHER_THREAD = '77777777-6666-4555-8444-333333333333'

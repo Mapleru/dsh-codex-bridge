@@ -65,15 +65,27 @@ function usage(code = 0) {
 
 const argv = process.argv.slice(2)
 let root = path.resolve(HERE, '..')
+let rootGiven = false
 const rest = []
 for (let i = 0; i < argv.length; i += 1) {
-  if (argv[i] === '--root') root = path.resolve(argv[++i])
-  else if (argv[i] === '--help' || argv[i] === '-h') usage(0)
+  if (argv[i] === '--root') {
+    root = path.resolve(argv[++i])
+    rootGiven = true
+  } else if (argv[i] === '--help' || argv[i] === '-h') usage(0)
   else rest.push(argv[i])
 }
 
 const command = rest[0]
 if (!command) usage(3)
+
+// Never create a mailbox by accident: running this file from the package
+// directory without --root used to fabricate an empty layout and then report
+// "0 parked", which reads as a truthful answer.
+if (!(await pathExists(path.join(root, FILES.state))) && !(await pathExists(path.join(root, FILES.inboxCodex)))) {
+  process.stderr.write(`mailbox not found at ${root}${rootGiven ? '' : '; pass --root <mailbox>'}
+`)
+  process.exit(4)
+}
 
 await ensureLayout(root)
 

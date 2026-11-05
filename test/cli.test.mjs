@@ -237,3 +237,12 @@ test('send.mjs refuses to queue while STOP is present', async (t) => {
   assert.equal(result.json.code, 'stop')
   assert.equal((await fs.stat(path.join(root, FILES.inboxDsh))).size, 0)
 })
+
+
+test('ctl refuses to invent a mailbox when run from the package directory', async () => {
+  const packageDir = path.join(PACKAGE, '..')
+  const result = await runCli(CTL, ['status'])
+  assert.equal(result.code, 4)
+  assert.match(result.stderr, /mailbox not found/)
+  await assert.rejects(fs.stat(path.join(packageDir, FILES.state)))
+})
