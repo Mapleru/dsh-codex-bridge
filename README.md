@@ -13,6 +13,15 @@ reuse a Codex Desktop thread via `codex queue` when that thread is held by the d
 - Security: the mailbox is plaintext and `from` is not authentication. Keep `root` inside the
   Codex working directory, and do not put secrets in messages. See “安全” below.
 
+## 动机
+
+Codex 在复杂问题上更强：跨文件推理、架构取舍、长上下文里保持约束一致。DSH 擅长跑流程、
+管文件和执行具体任务。这个插件把两者接起来——DSH 可以把一个架构性问题连同背景发给 Codex，
+Codex 在自己的线程里分析后把结论送回 DSH；后续追问继续落在同一个线程，不必每次重述上下文。
+
+它解决的是“同一个问题需要两种能力”的场景，而不是让两个助手互相闲聊：消息有来源、有路由、
+有往返上限，答复可回执、可恢复、可停止。
+
 Chinese details follow.
 
 ## 中文说明
@@ -277,7 +286,7 @@ node .\codex-bridge\tools\ctl.mjs reset-session
 - 未实现：Codex `queue` 调用方式（退出码不能证明完成）、`agents` 查询、HTTP 服务、
   自动把普通回答转发给 Codex。
 - **多路由已做真实验证（2026-11-05 12:29）**：临时挂两个路由（默认路由 + 第二个 DSH 会话
-  `session-6d590a2e-…`），两条都 `dshReady:true`；本会话调用 `route:"second"` 被拒
+  `session-11111111-…`），两条都 `dshReady:true`；本会话调用 `route:"second"` 被拒
   `route-forbidden`；Codex 侧 `send.mjs --route second` 投递成功。验证后已恢复单路由。
   未压测两个 Codex thread 同时长跑。
 - **webhook 来源的界面显示**：`agent.steer` + `source.kind='webhook'` 已能唤醒空闲会话并把

@@ -38,7 +38,7 @@
 
 | 检查 | 证据 | 结论 | 类型 |
 | --- | --- | --- | --- |
-| 懒取控制器 | `desktop-feishu-wake.mjs` 的 `ctx.get('sessionController')` | 沿用，不用 `inject` | 静态 |
+| 懒取控制器 | 一个现有哨兵插件的 `ctx.get('sessionController')` | 沿用，不用 `inject` | 静态 |
 | `resolveAgent` | `dsh-api-session-controller/lib/index.js` | 返回 `{agent}` 或 `{error:{code}}`；不存在时不改投 | 静态 |
 | `prompt` 幂等 | `lib/index.js:831-833` + `hasPromptRequest`（`source.rpcId === requestId`） | 稳定 `requestId` 重试不会插入第二条消息 | 静态 |
 | `prompt` 返回 | 同上 | `{accepted:true}` 或 `{error}`；只有 accepted 才推进游标 | 静态 |
@@ -142,7 +142,7 @@ node --test "test/*.test.mjs"
 | 运行中改绑（缺陷→修复） | `ctl bind default <thread-id>` 于 05:17:29.458Z 写入；紧接着的一条消息仍用内存里的旧绑定 `<thread-id>` 执行，完成时把 `routes.json` 覆盖回旧值（05:17:30.102Z）。修复：`pumpCodex`/`send` 前 `syncRoutesFromDisk()`；`processing.codexSessionId` 固定本次目标；完成时若磁盘绑定已变则保留新值并记 `binding-kept`。新增 2 例测试，73/73 通过 | 改绑不再被在途调用覆盖 | 真实（含修复） |
 | 重装后回归 | 重新 `remove_bundle`/`install_bundle` 后，`f7d9ff46…` → 05:06:42.900Z `completed`，回复 `ROUTE-STILL-OK`（thread `<thread-id>`），05:06:42.956Z 投递回本会话 | 新版（`deliveryMode`/`receipt`）装上后往返仍通 | 真实 |
 | 回执查询 | `ctl receipt 4c5ebde4…` → DSH 回复 `45af6633…`（05:02:38Z）+ 执行线程答复 `2e8b169e…`（05:02:47Z） | 不读原始 JSONL 也能核对双向回执 | 真实 |
-| 回执落点 | 桌面 Codex 会话跑 `send.mjs` 时，桥回复只进绑定的 CLI 线程；`codex-collab/RECEIPT-PLUGIN-20261105-F4C8.md` 记录完整链路 | 桌面会话看不到桥回复，需 `receipt` 或 `replies/` 核对 | 真实 |
+| 回执落点 | 桌面 Codex 会话跑 `send.mjs` 时，桥回复只进绑定的 CLI 线程；本地留存的回执记录包含完整链路 | 桌面会话看不到桥回复，需 `receipt` 或 `replies/` 核对 | 真实 |
 | 路由授权/缺省/未知/回复继承 | `test/routing.test.mjs` 8 例：调用者单一路由自动选中、跨会话 `route-forbidden`、多路由未指定 `route-required`、未知 `route-unknown`、回复继承父路由与 `route-mismatch`、已丢失路由 `route-session-lost`、旧 `session.json` 迁移、每路由独立 resume | 路由语义按 Codex 复审的 8 条约束实现 | 隔离 |
 
 ### 阶段二仍未验证

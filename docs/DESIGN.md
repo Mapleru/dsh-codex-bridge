@@ -11,7 +11,7 @@
 | Node | `v24.15.0` | `node --version` |
 | Profile | `C:\Users\<you>\.dsh\profiles\desktop` | `$DSH_PROFILE_DIR` / 目录存在 |
 | Profile bundles | `@deepseek-ai/dsh-base`、`dsh-web-app`、`dshmarket`、`dsh-whale-widget`、`dsh-ops`、`billion-context`、`cc-safety-net` | profile `package.json` |
-| 现有哨兵 | `desktop-feishu-wake`（session 1）、`desktop-session2-wake`（session 2） | profile `cordis.patch.yml` L54–101 |
+| 现有哨兵 | 两个既有 `*.mjs` 哨兵（session 1 / session 2） | profile `cordis.patch.yml` 的 insert 段 |
 
 阶段一**没有**修改 profile、没有安装 bundle、没有启停宿主、没有调用真实模型。
 
