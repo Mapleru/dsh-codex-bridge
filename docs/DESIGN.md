@@ -126,7 +126,7 @@ error items query action results changes server arguments ... usage input_tokens
 
 ### 3.1 现有哨兵（只读）
 
-`C:\Users\<you>\.dsh\profiles\desktop\desktop-feishu-wake.mjs`：
+一个现有哨兵插件：
 
 - 惰性控制器：`const controller = () => { try { return ctx.get('sessionController'); } catch { return undefined; } };`
 - 投递：`sessions.resolveAgent(sessionId)` → `sessions.prompt({requestId: crypto.randomUUID(), sessionId, mode:'queue', content:[{type:'text',text}], clientTimeZone:'Asia/Shanghai'}, new AbortController().signal)`。
